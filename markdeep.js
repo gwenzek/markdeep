@@ -274,7 +274,7 @@
         })
     }
 
-    function m(t, r) {
+    function m(t, r2) {
         var n = "",
             a = "",
             i = [0],
@@ -287,7 +287,7 @@
             i.splice(u, o - u), o = u, ++i[o - 1];
             var h = i.join("."),
                 f = "toc" + h;
-            return l[s(d).trim().toLowerCase()] = h, 3 >= u && (n += Array(u).join("&nbsp;&nbsp;") + '<a href="#' + f + '" class="level' + u + '">' + h + "&nbsp; " + d + "</a><br/>\n", 1 === u ? a += ' &middot; <a href="#' + f + '">' + d + "</a>" : ++c), e("a", "", r('name="' + f + '"')) + t
+            return l[s(d).trim().toLowerCase()] = h, 3 >= u && (n += Array(u).join("&nbsp;&nbsp;") + '<a href="#' + f + '" class="level' + u + '">' + h + "&nbsp; " + d + "</a><br/>\n", 1 === u ? a += ' &middot; <a href="#' + f + '">' + d + "</a>" : ++c), e("a", "", r2('name="' + f + '"')) + t
         }), a.length > 0 && (a = a.ss(10));
         var u = i[0],
             d = u + c,
@@ -295,7 +295,31 @@
         var h = '<div class="afterTitles"></div>',
             f = t.indexOf(h); - 1 === f ? f = 0 : f += h.length;
         var g = "";
-        return 4 > d && 1 >= u || 2048 > t.length || (7 > u && 2.5 > d / u ? g = '<div class="shortTOC">' + a + "</div>" : -1 === p || p / 55 > d ? g = '<div class="mediumTOC"><center><b>Contents</b></center><p>' + n + "</p></div>" : (f = p, g = '<div class="longTOC"><div class="tocHeader">Contents</div><p>' + n + "</p></div>")), t = t.ss(0, f) + g + t.ss(f), [t, l]
+        var toc = r("toc");
+        if(toc == "auto" || (toc != "short" && toc != "medium" && toc != "long"))
+            toc = (4 > d && 1 >= u || 2048 > t.length ) ?
+                (
+                    7 > u && 2.5 > d / u ? "small" :
+                    -1 === p || p / 55 > d ? "medium" :
+                    "long"
+                ): "none"
+        switch(toc) {
+            case "none":
+                g = "";
+                break;
+            case "short":
+                g = '<div class="shortTOC">' + a + "</div>";
+                break;
+            case "medium":
+                g = '<div class="mediumTOC"><center><b>Contents</b></center><p>';
+                break;
+            case "long":
+                f = p
+                g = '<div class="longTOC"><div class="tocHeader">Contents</div><p>' + n + "</p></div>";
+                break;
+        };
+        t = t.ss(0, f) + g + t.ss(f)
+        return [t, l];
     }
 
     function b(e) {
